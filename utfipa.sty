@@ -1,0 +1,331 @@
+% <@@=utfipa>
+% \begin{macrocode}
+\NeedsTeXFormat{LaTeX2e}[1994/06/01]
+\ProvidesPackage{utfipa}[2018/10/09 UTF-8 compatible IPA implementation]
+
+%%%%%%%%%%%%%%%%%%%%%
+% Required Packages %
+%%%%%%%%%%%%%%%%%%%%%
+\RequirePackage{xparse}
+\RequirePackage{environ}
+% \RequirePackage{textcomp} % for angled brackets in text
+
+\RequirePackage{utfipa-symbols} % symbol definitions
+
+%%%%%%%%%%%%%%%%
+% font control %
+%%%%%%%%%%%%%%%%
+% provide hook for fontspec if loaded
+\@ifpackageloaded{fontspec}{%
+  \NewDocumentCommand\setipafont{om}{%
+    \newfontfamily\ipafont[#1]{#2}
+  }
+}{}
+
+% declare fontswitch macro empty if undefined until begin document
+\AtBeginDocument{\ProvideDocumentCommand\ipafont{}{}}
+
+\ExplSyntaxOn % start expl3 syntax
+
+%%%%%%%%%%%%%
+% functions %
+%%%%%%%%%%%%%
+
+% Text substitution dictionary %
+% ---------------------------- %
+\makeatother % need to escape @ character like in normal text
+\tl_set:Nx \c_utfipa_textsub_tl
+{
+  % nested
+  { {C}   {\c{c}} }
+  { {I*}  {\"{\textsci}} }
+  { {U*}  {\"{\textupsilon}} }
+
+  % letters
+  { {A}   {\textscripta } }
+  { {B*}  {\textscb} }
+  { {B}   {\textbeta} }
+  { {d`}  {\textrtaild} }
+  { {D}   {\dh} }
+  { {E}   {\textepsilon} }
+  { {<F>} {\textglobfall} }
+  { {F}   {\textltailm} }
+  { {g}   {\textscriptg} }
+  { {G*}  {\textscg} }
+  { {G}   {\textgamma} }
+  { {h*}  {\texthth} }
+  { {H*}  {\textsch} }
+  { {H}   {\textturnh} }
+  { {I}   {\textsci} }
+  { {j*}  {\textctj} }
+  { {J*}  {\textbardotlessj} }
+  { {J}   {\textltailn} }
+  { {K*}  {\textlezhlig} }
+  { {K}   {\textbeltl} }
+  { {l`}  {\textrtaill} }
+  { {l*}  {\textturnlonglegr} }
+  { {L*}  {\textscl} }
+  { {L}   {\textturny} }
+  { {M*}  {\textturnmrleg} }
+  { {M}   {\textturnm} }
+  { {N*}  {\textscn} }
+  { {N}   {\ng} }
+  { {n*}  {\textctn} } % not standard X-SAMPA, analogy with c* etc
+  { {n`}  {\textrtailn} }
+  { {O*}  {\textbullseye} }
+  { {O}   {\textopeno} }
+  { {P}   {\textscriptv} }
+  { {p*}  {\textphi} }
+  { {Q}   {\textturnscripta} }
+  { {R*}  {\textscr} }
+  { {<R>} {\textglobrise} }
+  { {R}   {\textinvscr} }
+  { {r*`} {\textturnrrtail} }
+  { {r*}  {\textturnr} }
+  { {r`}  {\textrtailr} }
+  { {S}   {\textesh} }
+  { {s*}  {\textctc} }
+  { {s`}  {\textrtails} }
+  { {T}   {\texttheta} }
+  { {t`}  {\textrtailt} }
+  { {U}   {\textupsilon} }
+  { {v*}  {\textscriptv} }
+  { {V}   {\textturnv} }
+  { {W}   {\textturnw} }
+  { {x*}  {\texththeng} }
+  { {X}   {\textchi} }
+  { {Y}   {\textscy} }
+  { {z`}  {\textrtailz} }
+  { {z*}  {\textctz} }
+  { {Z}   {\textezh} }
+
+  % numbers
+  { {1}   {\textbari} }
+  { {2}   {\o} }
+  { {3*}  {\textcloserevepsilon} }
+  { {3}   {\textrevepsilon} }
+  { {4}   {\textfishhookr} }
+  { {5}   {\textltilde} }
+  { {6}   {\textturna} }
+  { {7}   {\textramshorns} }
+  { {8}   {\textbaro} }
+  { {9}   {\oe} }
+
+  % symbols
+  { {.} {.} }
+  { {"} {\textprimstress} }
+  { {?*} {\textrevglotstop} }
+  { {?} {\textglotstop} }
+  { {\%} {\textsecstress} }
+  { {\&}  {\textscoe} }
+  { {>*} {\textbarglotstop} }
+  { {<*} {\textbarrevglotstop} }
+  { {^} {\textupstep} }
+  { {!*} {ǃ} }
+  { {!} {\textdownstep} }
+  { {|*|*} {\textalvlatclick} }
+  { {|*} {\textdentalclick} }
+  { {||} {\textdoublepipe} }
+  { {|} {\textpipe} }
+  { {@`} {\textrhookschwa} } % needs \makeatother
+  { {@*} {\textreve} } % needs \makeatother
+  { {@} {\textschwa} } % needs \makeatother
+  { {(} {\ae} }
+  { {)} {\textbaru} }
+  { {=*} {\textdoublebarpipe} }
+  { {'} {\textpalhook} }
+  { {`} {\textrhoticity} }
+  { {-*}  {\textundertie} }
+  { {-}  {} }
+  % (\S)' = \1\c{palatized},
+  % (\S[\*`]?)` = \1\c{rhoticity},
+}
+\makeatletter
+
+\prop_const_from_keyval:Nn \c_utfipa_regexsub_prop {
+  % TODO: make them non-regex
+  b_< = \c{texthtb}, % exl3 takes underscore for an escaped character
+  c_< = \c{texthtc},
+  d_< = \c{texthtd},
+  g_< = \c{texthtg},
+  G\*_< = \c{texthtscg}, % from G*_<
+  J\*_< =  \c{texthtbardotlessj}, % from J*_<
+  k_< = \c{texthtk},
+  p_< = \c{texthtp},
+  t_< = \c{texthtt},
+  v_< = \c{textvhook}, % not yet in X-SAMPA, added by visual analogy
+  :\* = \c{texthalflength}, % expl3 takes colon for an escaped character
+  : = \c{textlengthmark},
+
+  % modifiers
+  (\S[\*`]?)_a = \c{textsubridge}\cB\{\1\cE\},
+  (\S[\*`]?)_\c{textscripta} = \c{textadvancing}\cB\{\1\cE\}, % from _A
+  (\S[\*`]?)_\c{textbeta}_\c{textturny} = \c{texttonelowrising}\cB\{\1\cE\}, % from _B_L
+  (\S[\*`]?)_\c{textbeta} = \c{textdoublegrave}\cB\{\1\cE\}, % from _B
+  (\S[\*`]?)_c = \c{textoverlhalfring}\cB\{\1\cE\},
+  (\S[\*`]?)_d = \c{textinvsubridge}\cB\{\1\cE\},
+  (\S[\*`]?)_e = \c{textsuperimposetilde}\cB\{\1\cE\},
+  (\S[\*`]?)_\c{textltailm} = \c{^}\cB\{\1\cE\}, % from _F
+  (\S[\*`]?)_\c{textgamma} = \1\c{textsuperscriptgamma}, % from _G
+  (\S[\*`]?)_h = \1\c{textsuperscripth},
+  (\S[\*`]?)_\c{textturnh}_\c{texttheta} = \c{texttonehighrising}\cB\{\1\cE\}, % from _H_T
+  (\S[\*`]?)_\c{textturnh} = \c{'}\cB\{\1\cE\}, % from _H
+  (\S[\*`]?)_j = \1\c{textsuperscriptj},
+  (\S[\*`]?)_k = \c{textsubtilde}\cB\{\1\cE\},
+  (\S[\*`]?)_l = \1\c{textsuperscriptl},
+  (\S[\*`]?)_\c{textturny} = \c{`}\cB\{\1\cE\}, % from _L
+  (\S[\*`]?)_m = \c{textsubsquare}\cB\{\1\cE\},
+  (\S[\*`]?)_\c{textturnm}<++> = \c{=}\cB\{\1\cE\}, % from _M
+  (\S[\*`]?)_n = \1\c{textsuperscriptn},
+  (\S[\*`]?)_\c{ng} = \c{textseagull}\cB\{\1\cE\}, % from _N
+  (\S[\*`]?)_o = \c{textlowering}\cB\{\1\cE\},
+  (\S[\*`]?)_\c{tetxopeno} = \c{textoverrhalfring}\cB\{\1\cE\}, % from _O
+  (\S[\*`]?)_q = \c{textretracting}\cB\{\1\cE\},
+  (\S[\*`]?)_r = \c{textraising}\cB\{\1\cE\},
+  (\S[\*`]?)_\c{textinvscr}_\c{textltailm} = \c{texttonerisingfalling}\cB\{\1\cE\}, % from _R_F
+  (\S[\*`]?)_\c{textinvscr} = \c{v}\cB\{\1\cE\}, % from _R
+  (\S[\*`]?)_t = \c{"}\*\cB\{\1\cE\},
+  (\S[\*`]?)_\c{texttheta} = \c{H}\cB\{\1\cE\}, % from _T
+  (\S[\*`]?)_v = \c{textsubwedge}\cB\{\1\cE\},
+  (\S[\*`]?)_w = \1\c{textsuperscriptw},
+  (\S[\*`]?)_x = \c{textovercross}\cB\{\1\cE\},
+  (\S[\*`]?)_X = \c{u}\cB\{\1\cE\}, % from _X
+  (\S[\*`]?)_0 = \c{r}\*\cB\{\1\cE\},
+  (\S[\*`]?)_\c{textrevglotstop} = \1\c{textsuperscriptrevglotstop}, % from _?*
+  (\S[\*`]?)_\* = \c{^}\cB\{\1\cE\},
+  (\S[\*`]?)_\c{textprimstress} = \c{"}\cB\{\1\cE\}, % from _"
+  (\S[\*`]?)_- = \c{=}\*\cB\{\1\cE\},
+  (\S[\*`]?)_> = \1\c{textmodapostrophe},
+  (\S[\*`]?)_\c{textupstep} = \c{textsubarch}\cB\{\1\cE\}, % from _^
+  (\S[\*`]?)_/ = \c{v}\cB\{\1\cE\},
+  (\S[\*`]?)_\c{textbaru} = \c{v}\cB\{\1\cE\}, % from _)
+  (\S[\*`]?)_\+ = \c{textadvancing}\cB\{\1\cE\},
+  (\S[\*`]?)_\= = \c{textsyllabic}\cB\{\1\cE\}, %TODO: \S does not capture `-sequences
+  (\S[\*`]?)\= = \c{textsyllabic}\cB\{\1\cE\},
+  (\S[\*`]?)_\~ = \c{\~}\cB\{\1\cE\},
+  (\S[\*`]?)\~ = \c{\~}\cB\{\1\cE\},
+  _ = \c{textcombiningtieabove},
+
+  % (\c{tone}\cB\{\d*?|\c{textbari}*?)\c{textbari}(\d*?|\c{textbari}*?\cE\}) = \1 1\2,
+  % (\c{tone}\cB\{\d*?|\c{o}*?)\c{o}(\d*?|\c{o}*?\cE\}) = \1 2\2,
+  % (\c{tone}\cB\{\d*?|\c{textrevepsilon}*?)\c{textrevepsilon}(\d*|\c{textrevepsilon}*?\cE\}) = \1 3\2,
+  % (\c{tone}\cB\{\d*?|\c{textfishhookr}*?)\c{textfishhookr}(\d*?|\c{textfishhookr}*?\cE\}) = \1 4\2,
+  % (\c{tone}\cB\{\d*?|\c{textltilde}*?)\c{textltilde}(\d*?|\c{textltilde}*?\cE\}) = \1 5\2,
+
+  % diacritics
+  % (\S)' = \1\c{palatized},
+  % (\S[\*`]?)` = \1\c{rhoticity},
+  % \\(\S*)\{(.*)\} = \c{\1}\cB\{\2\cE\},
+  % \\(\S*) = \c{\1},
+}
+
+% text substitution function %
+% -------------------------- %
+% helper function to avoid ##1 which are awkward to expand
+\cs_new:Npn \__utfipa_parse_optargs:nnn #1#2#3
+{
+  % parse raw optional arguments (the ones after the obligatory one)
+  \tl_set:Nn \l__utfipa_before_tl {#2}
+  \tl_set:Nn \l__utfipa_after_tl {#3}
+
+  % parse first optional arguments and append at the "inside" to raw ones
+  \tl_if_eq:nnTF {#1} {squarebrackets} {%
+    \tl_put_right:Nn \l__utfipa_before_tl {[}
+    \tl_put_left:Nn \l__utfipa_after_tl {]}
+  }{}
+  \tl_if_eq:nnTF {#1} {sb} {%
+    \tl_put_right:Nn \l__utfipa_before_tl {[}
+    \tl_put_left:Nn \l__utfipa_after_tl {]}
+  }{}
+  \tl_if_eq:nnTF {#1} {slash} {%
+    \tl_put_right:Nn \l__utfipa_before_tl {/}
+    \tl_put_left:Nn \l__utfipa_after_tl {/}
+  }{}
+  \tl_if_eq:nnTF {#1} {sl} {%
+    \tl_put_right:Nn \l__utfipa_before_tl {/}
+    \tl_put_left:Nn \l__utfipa_after_tl {/}
+  }{}
+  \tl_if_eq:nnTF {#1} {angledbrackets} {%
+    \tl_put_right:Nn \l__utfipa_before_tl {\textlangle}
+    \tl_put_left:Nn \l__utfipa_after_tl {\textrangle}
+  }{}
+  \tl_if_eq:nnTF {#1} {ab} {%
+    \tl_put_right:Nn \l__utfipa_before_tl {\textlangle}
+    \tl_put_left:Nn \l__utfipa_after_tl {\textrangle}
+  }{}
+}
+
+% helper function because that helps avoid double # arguments in \tl_replace_all
+% because it doesn't expand those well
+\cs_new:Npn \__utfipa_substitute_aux:nn #1#2
+{
+  \tl_replace_all:Nnn \l__utfipa_hayst_tl {#1} {#2}
+}
+
+% use dictionaries to convert X-SAMPA to IPA
+\cs_new:Npn \utfipa_convert_xsampa:n #1
+{
+  \group_begin:
+    % save input in variable
+    \tl_set:Nn \l__utfipa_hayst_tl {#1}
+
+    % simple text substitution
+    \tl_map_inline:Nn \c_utfipa_textsub_tl { \__utfipa_substitute_aux:nn ##1 }
+
+    % regex substitution
+    \prop_map_inline:Nn \c_utfipa_regexsub_prop
+    {
+      \regex_replace_all:nnN {##1} {##2} \l__utfipa_hayst_tl
+    }
+
+  \exp_last_unbraced:NV \group_end:
+  \l__utfipa_hayst_tl
+}
+
+% Document commands %
+% ----------------- %
+\NewDocumentCommand\textipa{O{}mO{}O{}}
+{%
+  {%
+    % \group_begin:
+    %   % parse optional arguments to define \l__utfipa_before_tl and -after_tl
+    %   \__utfipa_parse_optargs:nnn {#1} {#3} {#4}
+
+    %   \ipafont
+    %   \tl_use:N \l__utfipa_before_tl
+    %   \utfipa_convert_xsampa:n {#2}
+    %   \tl_use:N \l__utfipa_after_tl
+    % \group_end:
+    \begin{IPA}[#1][#3][#4]
+      #2
+    \end{IPA}
+  }%
+}
+
+\cs_generate_variant:Nn \utfipa_convert_xsampa:n {o} % need to unpack \BODY
+
+% wrapper environment that allows passing the body to a macro
+\NewEnviron{ipa@wrapper}%[1]
+{
+  \utfipa_convert_xsampa:o \BODY
+}
+
+\NewDocumentEnvironment{IPA}{O{}O{}O{}}%
+{
+  \group_begin:
+    % parse optional arguments to define \l__utfipa_before_tl and -after_tl
+    \__utfipa_parse_optargs:nnn {#1} {#2} {#3}
+
+    \ipafont
+    \tl_use:N \l__utfipa_before_tl
+    \ipa@wrapper
+}
+{
+    \endipa@wrapper
+    \tl_use:N \l__utfipa_after_tl
+  \group_end:
+}
+
+\ExplSyntaxOff
+
+% \end{macrocode}
