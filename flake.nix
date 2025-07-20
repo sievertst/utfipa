@@ -2,7 +2,7 @@
   description = "LaTeX package for typesetting Unicode-compliant IPA transcription";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-24.05";
+    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-25.05";
     flake-parts.url = "github:hercules-ci/flake-parts";
     nixfmt.url = "github:NixOS/nixfmt";
   };
