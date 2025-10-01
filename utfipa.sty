@@ -160,7 +160,8 @@
   % modifiers
   (\S[\*`]?)_a = \c{textsubridge}\cB\{\1\cE\},
   (\S[\*`]?)_\c{textscripta} = \c{textadvancing}\cB\{\1\cE\}, % from _A
-  (\S[\*`]?)_\c{textbeta}_\c{textturny} = \c{texttonelowrising}\cB\{\1\cE\}, % from _B_L
+  % from _B_L
+  (\S[\*`]?)_\c{textbeta}_\c{textturny} = \c{texttonelowrising}\cB\{\1\cE\}, 
   (\S[\*`]?)_\c{textbeta} = \c{textdoublegrave}\cB\{\1\cE\}, % from _B
   (\S[\*`]?)_c = \c{textoverlhalfring}\cB\{\1\cE\},
   (\S[\*`]?)_d = \c{textinvsubridge}\cB\{\1\cE\},
@@ -168,7 +169,8 @@
   (\S[\*`]?)_\c{textltailm} = \c{^}\cB\{\1\cE\}, % from _F
   (\S[\*`]?)_\c{textgamma} = \1\c{textsuperscriptgamma}, % from _G
   (\S[\*`]?)_h = \1\c{textsuperscripth},
-  (\S[\*`]?)_\c{textturnh}_\c{texttheta} = \c{texttonehighrising}\cB\{\1\cE\}, % from _H_T
+  % from _H_T
+  (\S[\*`]?)_\c{textturnh}_\c{texttheta} = \c{texttonehighrising}\cB\{\1\cE\}, 
   (\S[\*`]?)_\c{textturnh} = \c{'}\cB\{\1\cE\}, % from _H
   (\S[\*`]?)_j = \1\c{textsuperscriptj},
   (\S[\*`]?)_k = \c{textsubtilde}\cB\{\1\cE\},
@@ -182,7 +184,9 @@
   (\S[\*`]?)_\c{tetxopeno} = \c{textoverrhalfring}\cB\{\1\cE\}, % from _O
   (\S[\*`]?)_q = \c{textretracting}\cB\{\1\cE\},
   (\S[\*`]?)_r = \c{textraising}\cB\{\1\cE\},
-  (\S[\*`]?)_\c{textinvscr}_\c{textltailm} = \c{texttonerisingfalling}\cB\{\1\cE\}, % from _R_F
+  % from _R_F
+  (\S[\*`]?)_\c{textinvscr}_\c{textltailm} =
+  \c{texttonerisingfalling}\cB\{\1\cE\}, 
   (\S[\*`]?)_\c{textinvscr} = \c{v}\cB\{\1\cE\}, % from _R
   (\S[\*`]?)_t = \c{"}\*\cB\{\1\cE\},
   (\S[\*`]?)_\c{texttheta} = \c{H}\cB\{\1\cE\}, % from _T
@@ -200,17 +204,22 @@
   (\S[\*`]?)_/ = \c{v}\cB\{\1\cE\},
   (\S[\*`]?)_\c{textbaru} = \c{v}\cB\{\1\cE\}, % from _)
   (\S[\*`]?)_\+ = \c{textadvancing}\cB\{\1\cE\},
-  (\S[\*`]?)_\= = \c{textsyllabic}\cB\{\1\cE\}, %TODO: \S does not capture `-sequences
+  % TODO: \S does not capture `-sequences
+  (\S[\*`]?)_\= = \c{textsyllabic}\cB\{\1\cE\}, 
   (\S[\*`]?)\= = \c{textsyllabic}\cB\{\1\cE\},
   (\S[\*`]?)_\~ = \c{\~}\cB\{\1\cE\},
   (\S[\*`]?)\~ = \c{\~}\cB\{\1\cE\},
   _ = \c{textcombiningtieabove},
 
-  % (\c{tone}\cB\{\d*?|\c{textbari}*?)\c{textbari}(\d*?|\c{textbari}*?\cE\}) = \1 1\2,
+  % (\c{tone}\cB\{\d*?|\c{textbari}*?)\c{textbari}(\d*?|\c{textbari}*?\cE\})
+  % = \1 1\2,
   % (\c{tone}\cB\{\d*?|\c{o}*?)\c{o}(\d*?|\c{o}*?\cE\}) = \1 2\2,
-  % (\c{tone}\cB\{\d*?|\c{textrevepsilon}*?)\c{textrevepsilon}(\d*|\c{textrevepsilon}*?\cE\}) = \1 3\2,
-  % (\c{tone}\cB\{\d*?|\c{textfishhookr}*?)\c{textfishhookr}(\d*?|\c{textfishhookr}*?\cE\}) = \1 4\2,
-  % (\c{tone}\cB\{\d*?|\c{textltilde}*?)\c{textltilde}(\d*?|\c{textltilde}*?\cE\}) = \1 5\2,
+  % (\c{tone}\cB\{\d*?|\c{textrevepsilon}*?)\c{textrevepsilon}(\d*|\c{textrevepsilon}*?\cE\})
+  % = \1 3\2,
+  % (\c{tone}\cB\{\d*?|\c{textfishhookr}*?)\c{textfishhookr}(\d*?|\c{textfishhookr}*?\cE\})
+  % = \1 4\2,
+  % (\c{tone}\cB\{\d*?|\c{textltilde}*?)\c{textltilde}(\d*?|\c{textltilde}*?\cE\})
+  % = \1 5\2,
 
   % diacritics
   % (\S)' = \1\c{palatized},
@@ -266,17 +275,17 @@
 \cs_new:Npn \utfipa_convert_xsampa:n #1
 {
   \group_begin:
-    % save input in variable
-    \tl_set:Nn \l__utfipa_hayst_tl {#1}
+  % save input in variable
+  \tl_set:Nn \l__utfipa_hayst_tl {#1}
 
-    % simple text substitution
-    \tl_map_inline:Nn \c_utfipa_textsub_tl { \__utfipa_substitute_aux:nn ##1 }
+  % simple text substitution
+  \tl_map_inline:Nn \c_utfipa_textsub_tl { \__utfipa_substitute_aux:nn ##1 }
 
-    % regex substitution
-    \prop_map_inline:Nn \c_utfipa_regexsub_prop
-    {
-      \regex_replace_all:nnN {##1} {##2} \l__utfipa_hayst_tl
-    }
+  % regex substitution
+  \prop_map_inline:Nn \c_utfipa_regexsub_prop
+  {
+    \regex_replace_all:nnN {##1} {##2} \l__utfipa_hayst_tl
+  }
 
   \exp_last_unbraced:NV \group_end:
   \l__utfipa_hayst_tl
@@ -313,16 +322,16 @@
 \NewDocumentEnvironment{IPA}{O{}O{}O{}}%
 {
   \group_begin:
-    % parse optional arguments to define \l__utfipa_before_tl and -after_tl
-    \__utfipa_parse_optargs:nnn {#1} {#2} {#3}
+  % parse optional arguments to define \l__utfipa_before_tl and -after_tl
+  \__utfipa_parse_optargs:nnn {#1} {#2} {#3}
 
-    \ipafont
-    \tl_use:N \l__utfipa_before_tl
-    \ipa@wrapper
+  \ipafont
+  \tl_use:N \l__utfipa_before_tl
+  \ipa@wrapper
 }
 {
-    \endipa@wrapper
-    \tl_use:N \l__utfipa_after_tl
+  \endipa@wrapper
+  \tl_use:N \l__utfipa_after_tl
   \group_end:
 }
 

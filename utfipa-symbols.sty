@@ -34,7 +34,9 @@
 \DeclareDocumentCommand\textdentalclick{}{ǀ} % in tipa as textpipe
 \DeclareDocumentCommand\textdoublebarpipe{}{ǂ}
 \DeclareDocumentCommand\textalvlatclick{}{ǁ} % in tipa as textdoublepipe
-\DeclareDocumentCommand\textdoublepipe{}{‖} % should be double pipe character by analogy with textpipe, but defined as alveolar lateral click in tipa
+% should be double pipe character by analogy with textpipe, but defined as
+% alveolar lateral click in tipa
+\DeclareDocumentCommand\textdoublepipe{}{‖} 
 \DeclareDocumentCommand\textepsilon{}{ɛ}
 \DeclareDocumentCommand\textesh{}{ʃ}
 \DeclareDocumentCommand\textezh{}{ʒ} % textyogh kept for backwards compatability
@@ -51,16 +53,19 @@
 \DeclareDocumentCommand\texththeng{}{ɧ}
 \DeclareDocumentCommand\texthtscg{}{ʛ}
 \DeclareDocumentCommand\textinvscr{}{ʁ}
-\DeclareDocumentCommand\textlezhlig{}{ɮ} % textlyoghlig kept for backwards compatability
+% textlyoghlig kept for backwards compatability
+\DeclareDocumentCommand\textlezhlig{}{ɮ} 
 \DeclareDocumentCommand\textlslig{}{ʪ} % not in tipa
 \DeclareDocumentCommand\textltailm{}{ɱ}
 \DeclareDocumentCommand\textltailn{}{ɲ}
 \DeclareDocumentCommand\textltilde{}{ɫ}
-\DeclareDocumentCommand\textlyoghlig{}{\textlezhlig} % kept for backwards compatability
+% kept for backwards compatability
+\DeclareDocumentCommand\textlyoghlig{}{\textlezhlig} 
 \DeclareDocumentCommand\textlzlig{}{ʫ} % not in tipa
 \DeclareDocumentCommand\textopeno{}{ɔ}
 \DeclareDocumentCommand\textphi{}{ɸ}
-\DeclareDocumentCommand\textpipe{}{|} % should be pipe character but redefined to dental click in tipa
+% should be pipe character but redefined to dental click in tipa
+\DeclareDocumentCommand\textpipe{}{|} 
 \DeclareDocumentCommand\textramshorns{}{ɤ}
 \DeclareDocumentCommand\textreve{}{ɘ}
 \DeclareDocumentCommand\textrevepsilon{}{ɜ}
@@ -157,7 +162,8 @@
   % TODO: emulate original \t and put character between chars 1 and 2 rather
   % than -2 and -1?
 }
-\DeclareDocumentCommand\textadvancing{m}{\textsubrighttack{#1}} % right tack (atr) instead of + for consistency with tipa
+% right tack (atr) instead of + for consistency with tipa
+\DeclareDocumentCommand\textadvancing{m}{\textsubrighttack{#1}}
 \DeclareDocumentCommand\textbottomtiebar{m}{
   % TODO: insert non-combining char if input empty
   \utfipa_place_before_last_in:nn {#1} {\textcombiningtiebelow}
@@ -187,7 +193,8 @@
 % \DeclareDocumentCommand\textoverw{m}{???}
 \DeclareDocumentCommand\textprimstress{}{ˈ}
 \DeclareDocumentCommand\textraising{m}{#1\symbol{"031D}}
-\DeclareDocumentCommand\textretracting{m}{\textsubltack{#1}} % left tack instead of - for consistency with tipa
+% left tack instead of - for consistency with tipa
+% \DeclareDocumentCommand\textretracting{m}{\textsubltack{#1}} 
 \DeclareDocumentCommand\textrisefall{m}{#1\symbol{"1DC8}}
 \DeclareDocumentCommand\textringmacron{m}{\r{\={#1}}}
 \DeclareDocumentCommand\textseagull{m}{#1\symbol{"033C}}
@@ -195,7 +202,8 @@
 \DeclareDocumentCommand\textsubarch{m}{#1\symbol{"032F}}
 \DeclareDocumentCommand\textsubbar{m}{#1\symbol{"0331}}
 \DeclareDocumentCommand\textsubdot{m}{#1\symbol{"0323}}
-\DeclareDocumentCommand\textsubltack{m}{#1\symbol{"0319}} % in tipa as textretracting
+% in tipa as textretracting
+\DeclareDocumentCommand\textsubltack{m}{#1\symbol{"0319}} 
 \DeclareDocumentCommand\textsublhalfring{m}{#1\symbol{"031C}}
 \DeclareDocumentCommand\textsubminus{m}{#1\symbol{"0320}}
 \DeclareDocumentCommand\textsubrhalfring{m}{#1\symbol{"0339}}
@@ -203,7 +211,8 @@
 \DeclareDocumentCommand\textsubbridge{m}{#1\symbol{"032A}}
 \DeclareDocumentCommand\textsubridge{m}{\textsubbridge{#1}}
 \DeclareDocumentCommand\textsubring{m}{#1\symbol{"030A}}
-\DeclareDocumentCommand\textsubrtack{m}{#1\symbol{"0318}} % in tipa as textadvancing
+% in tipa as textadvancing
+\DeclareDocumentCommand\textsubrtack{m}{#1\symbol{"0318}} 
 \DeclareDocumentCommand\textsubsquare{m}{#1\symbol{"033B}}
 \DeclareDocumentCommand\textsubtilde{m}{#1\symbol{"0330}}
 \DeclareDocumentCommand\textsubumlaut{m}{#1\symbol{"0324}}
@@ -211,8 +220,10 @@
 \DeclareDocumentCommand\textsubwedge{m}{#1\symbol{"032C}}
 \DeclareDocumentCommand\textsuperimposetilde{m}{#1\symbol{"0334}}
 \DeclareDocumentCommand\textsyllabic{m}{#1\symbol{"0329}}
-\DeclareDocumentCommand\textcombiningtiebelow{}{\symbol{"035C}} % not separately in tipa
-\DeclareDocumentCommand\textcombiningtieabove{}{\symbol{"0361}} % not separately in tipa
+% not separately in tipa
+\DeclareDocumentCommand\textcombiningtiebelow{}{\symbol{"035C}} 
+% not separately in tipa
+\DeclareDocumentCommand\textcombiningtieabove{}{\symbol{"0361}}
 \DeclareDocumentCommand\texttoptiebar{m}{%
   \utfipa_place_before_last_in:nn {#1} {\textcombiningtieabove}
 }
@@ -296,8 +307,10 @@
 \DeclareDocumentCommand\textbrevemacron{m}{\u{\={#1}}}
 % \DeclareDocumentCommand\textbard{}{???}
 % \DeclareDocumentCommand\textbarg{}{???}
-\DeclareDocumentCommand\textbenttailezh{}{ƺ} % textbenttailyogh kept for backwards compatability
-\DeclareDocumentCommand\textbenttailyogh{}{\textbenttailezh} % kept for backwards compatability
+% textbenttailyogh kept for backwards compatability
+\DeclareDocumentCommand\textbenttailezh{}{ƺ}
+% kept for backwards compatability
+\DeclareDocumentCommand\textbenttailyogh{}{\textbenttailezh}
 \DeclareDocumentCommand\textceltpal{}{\symbol{"2032}}
 \DeclareDocumentCommand\textcloseepsilon{}{ʚ}
 \DeclareDocumentCommand\textcloseomega{}{ɷ}
@@ -316,7 +329,8 @@
 \DeclareDocumentCommand\textctd{}{ȡ}
 % \DeclareDocumentCommand\textctdctzlig{}{}
 \DeclareDocumentCommand\textctesh{}{ʆ}
-\DeclareDocumentCommand\textctezh{}{ʓ} % textctyogh kept for backwards compatability
+% textctyogh kept for backwards compatability
+\DeclareDocumentCommand\textctezh{}{ʓ} 
 % \DeclareDocumentCommand\textctinvglotstop{}{???}
 \DeclareDocumentCommand\textctl{}{ȴ} % not in tipa
 \DeclareDocumentCommand\textctn{}{ȵ}
@@ -327,12 +341,14 @@
 \DeclareDocumentCommand\textcttctclig{}{ʨ}
 % \DeclareDocumentCommand\textctturnt{}{???}
 \DeclareDocumentCommand\textctwo{}{ƻ}
-\DeclareDocumentCommand\textctyogh{}{\textctezh} % kept for backwards compatability
+% textctyogh kept for backwards compatability
+\DeclareDocumentCommand\textctyogh{}{\textctezh}
 
 % textd… - texti…
 \DeclareDocumentCommand\textdblig{}{ȸ}
 \DeclareDocumentCommand\textdctzlig{}{ʥ}
-\DeclareDocumentCommand\textdezhlig{}{ʤ} % textdyoghlig kept for backwards compatability
+% textdyoghlig kept for backwards compatability
+\DeclareDocumentCommand\textdezhlig{}{ʤ}
 % \DeclareDocumentCommand\textdotacute{m}{???}
 \DeclareDocumentCommand\textdotbreve{m}{#1\symbol{"0310}}
 \DeclareDocumentCommand\textdottedtilde{m}{#1\symbol{"034B}} % extIPA
@@ -345,7 +361,8 @@
 % \DeclareDocumentCommand\textdoublebarpipevar{}{???}
 % \DeclareDocumentCommand\textdoublebarslash{}{???}
 \DeclareDocumentCommand\textdoublevbaraccent{m}{#1\symbol{"030E}}
-\DeclareDocumentCommand\textdyoghlig{}{\textdezhlig} % kept for backwards compatability
+% kept for backwards compatability
+\DeclareDocumentCommand\textdyoghlig{}{\textdezhlig}
 \DeclareDocumentCommand\textemptyset{}{∅} % kept for backwards compatability
 \DeclareDocumentCommand\textequals{}{\symbol{"02ED}}
 \DeclareDocumentCommand\textfenglig{}{ʩ}
@@ -418,7 +435,8 @@
 % \DeclareDocumentCommand\textpalhooklong{}{???}
 % \DeclareDocumentCommand\textpalhookvar{}{???}
 % \DeclareDocumentCommand\textpipevar{}{??}
-\DeclareDocumentCommand\textpolhook{m}{\k{#1}} % already in LaTeX as \k (right-aligned) and \textogonekcentered (centered)
+% already in LaTeX as \k (right-aligned) and \textogonekcentered (centered)
+\DeclareDocumentCommand\textpolhook{m}{\k{#1}}
 \DeclareDocumentCommand\textqplig{}{ȹ}
 
 % textr… - texts…
@@ -429,9 +447,11 @@
 \DeclareDocumentCommand\textrevscn{}{ᴎ} % UPA. Not in tipa
 % \DeclareDocumentCommand\textrevscl{}{???}
 \DeclareDocumentCommand\textrevscr{}{я}
-\DeclareDocumentCommand\textrevezh{}{ƹ} % textrevyogh kept for backwards compatability
+% textrevyogh kept for backwards compatability
+\DeclareDocumentCommand\textrevezh{}{ƹ}
 % \DeclareDocumentCommand\textrevpolhook{m}{???}
-\DeclareDocumentCommand\textrevyogh{}{\textrevezh} % kept for backwards compatability
+% kept for backwards compatability
+\DeclareDocumentCommand\textrevyogh{}{\textrevezh}
 \DeclareDocumentCommand\textrho{}{ρ} % not in tipa
 \DeclareDocumentCommand\textrhook{}{\symbol{"0322}}
 % \DeclareDocumentCommand\textrhooklong{}{???}
